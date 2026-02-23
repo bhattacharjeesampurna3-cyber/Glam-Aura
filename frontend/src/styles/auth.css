@@ -1,0 +1,94 @@
+/* ===== AUTH PAGE BACKGROUND ===== */
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ff3f6c, #ff9a9e);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== AUTH CARD ===== */
+
+.auth-box {
+  width: 380px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  color: white;
+  text-align: center;
+}
+
+/* ===== HEADINGS ===== */
+
+.auth-box h2 {
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+/* ===== FORM INPUTS ===== */
+
+.auth-box input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 18px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Focus Effect */
+.auth-box input:focus {
+  box-shadow: 0 0 0 2px white;
+}
+
+/* ===== BUTTON ===== */
+
+.auth-box button {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  color: #ff3f6c;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  transition: 0.3s ease;
+}
+
+.auth-box button:hover {
+  background: #f3f3f3;
+  transform: translateY(-2px);
+}
+
+/* ===== ERROR MESSAGE ===== */
+
+.auth-box p {
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+/* ===== SWITCH TEXT ===== */
+
+.switch-text {
+  margin-top: 15px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.switch-text span {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 480px) {
+  .auth-box {
+    width: 90%;
+    padding: 30px;
+  }
+}

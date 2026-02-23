@@ -1,0 +1,188 @@
+/* ========== ADMIN LAYOUT ========== */
+
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f6f9;
+}
+
+/* ========== SIDEBAR ========== */
+
+.admin-sidebar {
+  width: 250px;
+  background: #111827;
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-sidebar h2 {
+  margin-bottom: 40px;
+  font-size: 22px;
+  text-align: center;
+}
+
+.admin-sidebar a {
+  color: #d1d5db;
+  text-decoration: none;
+  margin-bottom: 20px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.admin-sidebar a:hover {
+  color: #ff3f6c;
+}
+
+/* ========== MAIN CONTENT ========== */
+
+.admin-main {
+  flex: 1;
+  padding: 40px;
+}
+
+/* Header */
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.admin-header h1 {
+  font-size: 26px;
+  color: #111827;
+}
+
+.logout-btn {
+  background: #ff3f6c;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.logout-btn:hover {
+  background: #e73360;
+}
+
+/* ========== PRODUCT FORM ========== */
+
+.product-form {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 40px;
+}
+
+.product-form h3 {
+  margin-bottom: 20px;
+}
+
+.product-form input,
+.product-form select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.product-form button {
+  width: 100%;
+  padding: 12px;
+  background: #111827;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.product-form button:hover {
+  background: #ff3f6c;
+}
+
+/* ========== PRODUCT TABLE ========== */
+
+.product-table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.product-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.product-table th {
+  background: #111827;
+  color: white;
+  padding: 15px;
+  text-align: left;
+}
+
+.product-table td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.product-table tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Action Buttons */
+
+.edit-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin-right: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background: #1d4ed8;
+}
+
+.delete-btn:hover {
+  background: #b91c1c;
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 900px) {
+  .admin-container {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .admin-main {
+    padding: 20px;
+  }
+}

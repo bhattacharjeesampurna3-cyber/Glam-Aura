@@ -1,0 +1,124 @@
+/* ===== CSS RESET ===== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== ROOT VARIABLES ===== */
+
+:root {
+  --primary-color: #ff3f6c;
+  --dark-color: #111827;
+  --light-bg: #f9fafb;
+  --text-gray: #6b7280;
+  --border-radius: 8px;
+}
+
+/* ===== BODY STYLING ===== */
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--light-bg);
+  color: var(--dark-color);
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+
+/* ===== LINKS ===== */
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ===== BUTTON BASE STYLE ===== */
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  border-radius: var(--border-radius);
+  transition: 0.3s ease;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* ===== INPUT FIELDS ===== */
+
+input,
+select,
+textarea {
+  outline: none;
+  border: 1px solid #e5e7eb;
+  padding: 10px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  width: 100%;
+  transition: 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary-color);
+}
+
+/* ===== IMAGE ===== */
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ===== CONTAINER CLASS ===== */
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* ===== SCROLLBAR (Modern Look) ===== */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e73360;
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+.text-center {
+  text-align: center;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.shadow {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.rounded {
+  border-radius: var(--border-radius);
+}
