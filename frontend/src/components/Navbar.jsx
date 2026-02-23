@@ -1,22 +1,30 @@
-import { Link } from "react-router-dom";
+import "../styles/navbar.css";
 
-const Navbar = () => {
+function Navbar() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark luxury-nav">
-      <div className="container">
-        <Link className="navbar-brand brand-logo" to="/">GlamAura</Link>
+    <nav className="navbar">
 
-        <div>
-          <Link to="/upload" className="btn btn-outline-light me-2">
-            AI Try
-          </Link>
-          <Link to="/login" className="btn btn-pink">
-            Login
-          </Link>
-        </div>
+      <div className="logo">
+        Glam Aura
       </div>
+
+      <div className="nav-links">
+        <a>Beauty</a>
+        <a>Fashion</a>
+        <a>Luxury</a>
+        <a>AI Tools</a>
+      </div>
+
+      <input className="search" placeholder="Search products..." />
+
+      <div className="nav-icons">
+        <span>❤</span>
+        <span>🛒</span>
+        <span>👤</span>
+      </div>
+
     </nav>
   );
-};
+}
 
 export default Navbar;

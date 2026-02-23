@@ -1,4 +1,4 @@
-import "./footer.css";
+import "../styles/footer.css";
 
 function Footer() {
   return (
@@ -6,51 +6,45 @@ function Footer() {
 
       <div className="footer-container">
 
-        {/* BRAND */}
-        <div className="footer-section">
-          <h2>GlamStyle</h2>
-          <p>
-            AI-powered beauty & fashion recommendations tailored just for you.
+        <div>
+          <div className="footer-logo">GlamAura</div>
+          <p className="footer-about">
+            AI powered beauty and fashion recommendations
+            designed just for you.
           </p>
         </div>
 
-        {/* QUICK LINKS */}
-        <div className="footer-section">
-          <h3>Quick Links</h3>
+        <div className="footer-column">
+          <h4>Shop</h4>
           <ul>
-            <li>Home</li>
-            <li>Shop</li>
-            <li>AI Recommendations</li>
-            <li>Contact Us</li>
+            <li><a href="#">Makeup</a></li>
+            <li><a href="#">Dresses</a></li>
+            <li><a href="#">Accessories</a></li>
           </ul>
         </div>
 
-        {/* CUSTOMER SUPPORT */}
-        <div className="footer-section">
-          <h3>Customer Care</h3>
+        <div className="footer-column">
+          <h4>Company</h4>
           <ul>
-            <li>FAQs</li>
-            <li>Shipping Policy</li>
-            <li>Return Policy</li>
-            <li>Privacy Policy</li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Careers</a></li>
           </ul>
         </div>
 
-        {/* SOCIAL MEDIA */}
-        <div className="footer-section">
-          <h3>Follow Us</h3>
-          <div className="social-icons">
-            <span>📷</span>
-            <span>📘</span>
-            <span>🐦</span>
-            <span>▶</span>
-          </div>
+        <div className="footer-column">
+          <h4>Follow</h4>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">YouTube</a></li>
+          </ul>
         </div>
 
       </div>
 
       <div className="footer-bottom">
-        © {new Date().getFullYear()} GlamStyle. All Rights Reserved.
+        © 2026 GlamAura. All rights reserved.
       </div>
 
     </footer>

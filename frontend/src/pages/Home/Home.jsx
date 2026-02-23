@@ -1,44 +1,62 @@
 import "../../styles/home.css";
+import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+function Home() {
+    const navigate = useNavigate();
   return (
-    <>
-      <section className="hero-section">
-        <div className="hero-content text-center text-white">
-          <h1>AI Beauty & Fashion Recommendation</h1>
-          <p>Discover shades & styles made just for you</p>
-          <a href="/upload" className="btn btn-luxury">
-            Try Now
-          </a>
-        </div>
+    <div className="home">
+
+      <section className="hero" style={{ backgroundImage: `url('/images/Banner.jpeg')` }}>
+  <div className="hero-overlay">
+
+    <h1>AI Beauty & Fashion Recommendation</h1>
+
+    <p>Discover shades & styles made just for you</p>
+
+    <button className="hero-btn" onClick={() => navigate("/recommendations")}>
+      Try AI Now
+    </button>
+
+  </div>
+</section>
+
+      {/* CATEGORIES */}
+
+      <section className="categories">
+
+        <div className="category">Makeup</div>
+        <div className="category">Skincare</div>
+        <div className="category">Dresses</div>
+        <div className="category">Luxury</div>
+
       </section>
 
-      <div className="container py-5">
-        <div className="row text-center">
-          <div className="col-md-4">
-            <div className="premium-card">
-              <h4>AI Shade Match</h4>
-              <p>Upload photo & get perfect lipstick shade.</p>
-            </div>
-          </div>
+      {/* PRODUCTS */}
 
-          <div className="col-md-4">
-            <div className="premium-card">
-              <h4>Body Shape AI</h4>
-              <p>Find dresses that suit your structure.</p>
-            </div>
-          </div>
+      <section className="products">
 
-          <div className="col-md-4">
-            <div className="premium-card">
-              <h4>Luxury Picks</h4>
-              <p>Curated premium fashion collection.</p>
-            </div>
-          </div>
+        <div className="product">
+          <img src="/images/lipstick.jpg" />
+          <h4>Matte Lipstick</h4>
+          <p>₹799</p>
         </div>
-      </div>
-    </>
+
+        <div className="product">
+          <img src="/images/dress.jpg" />
+          <h4>Summer Dress</h4>
+          <p>₹1999</p>
+        </div>
+
+        <div className="product">
+          <img src="/images/foundation.jpg" />
+          <h4>Liquid Foundation</h4>
+          <p>₹1299</p>
+        </div>
+
+      </section>
+
+    </div>
   );
-};
+}
 
 export default Home;

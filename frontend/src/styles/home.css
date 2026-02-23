@@ -1,204 +1,93 @@
-/* ===== HERO SECTION ===== */
-
-.hero {
-  position: relative;
-  width: 100%;
-  height: 500px;
-  overflow: hidden;
+.home{
+color:white;
 }
 
-.hero img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+/* HERO */
+
+.hero{
+height: 80vh;
+background-size: cover;
+background-position: center;
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative;
 }
 
-.hero-content {
-  position: absolute;
-  top: 40%;
-  left: 8%;
-  color: white;
+.hero-overlay{
+background: rgba(0,0,0,0.55);
+padding: 60px;
+text-align: center;
+border-radius: 10px;
+color: white;
 }
 
-.hero-content h1 {
-  font-size: 48px;
-  margin-bottom: 15px;
+.hero h1{
+font-size: 48px;
+margin-bottom: 15px;
 }
 
-.hero-content p {
-  font-size: 18px;
-  margin-bottom: 20px;
+.hero p{
+font-size: 18px;
+margin-bottom: 25px;
 }
 
-.hero-content button {
-  padding: 12px 28px;
-  background: #ff3f6c;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: 0.3s ease;
+.hero-btn{
+background:#ff3f6c;
+border:none;
+padding:14px 28px;
+border-radius:6px;
+color:white;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
 }
 
-.hero-content button:hover {
-  background: #e73360;
-  transform: translateY(-3px);
+.hero-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
 }
 
-/* ===== CATEGORY SECTION ===== */
+/* CATEGORIES */
 
-.categories {
-  padding: 70px 80px;
-  text-align: center;
+.categories{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+padding:40px;
 }
 
-.categories h2 {
-  margin-bottom: 40px;
-  font-size: 28px;
+.category{
+background:#1c1c1c;
+padding:40px;
+text-align:center;
+border-radius:10px;
+cursor:pointer;
+transition:.3s;
 }
 
-.category-grid {
-  display: flex;
-  gap: 30px;
-  justify-content: center;
-  flex-wrap: wrap;
+.category:hover{
+background:#ff3f6c;
 }
 
-.category-card {
-  width: 250px;
-  cursor: pointer;
-  transition: 0.3s ease;
+/* PRODUCTS */
+
+.products{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:30px;
+padding:40px;
 }
 
-.category-card img {
-  width: 100%;
-  border-radius: 12px;
+.product{
+background:#1c1c1c;
+padding:20px;
+border-radius:10px;
+text-align:center;
 }
 
-.category-card p {
-  margin-top: 12px;
-  font-weight: 600;
-}
-
-.category-card:hover {
-  transform: scale(1.05);
-}
-
-/* ===== TRENDING PRODUCTS ===== */
-
-.trending {
-  padding: 70px 80px;
-  background: #f9fafb;
-}
-
-.trending h2 {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.product-grid {
-  display: flex;
-  gap: 25px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.product-card {
-  width: 240px;
-  background: white;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: 0.3s ease;
-  text-align: center;
-}
-
-.product-card img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-.product-card h4 {
-  margin: 10px 0 5px;
-}
-
-.product-card p {
-  color: #6b7280;
-  font-size: 14px;
-}
-
-.product-card span {
-  font-weight: 600;
-  display: block;
-  margin-top: 5px;
-}
-
-.product-card button {
-  margin-top: 12px;
-  padding: 8px 15px;
-  background: #ff3f6c;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.product-card button:hover {
-  background: #e73360;
-}
-
-.product-card:hover {
-  transform: translateY(-6px);
-}
-
-/* ===== AI SECTION ===== */
-
-.ai-section {
-  padding: 80px;
-  text-align: center;
-  background: linear-gradient(to right, #ff9a9e, #fad0c4);
-  color: white;
-}
-
-.ai-section h2 {
-  font-size: 30px;
-  margin-bottom: 15px;
-}
-
-.ai-section p {
-  margin-bottom: 25px;
-}
-
-.ai-section button {
-  padding: 12px 25px;
-  background: #111827;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.ai-section button:hover {
-  background: black;
-  transform: scale(1.05);
-}
-
-/* ===== RESPONSIVE ===== */
-
-@media (max-width: 900px) {
-  .hero {
-    height: 350px;
-  }
-
-  .hero-content h1 {
-    font-size: 30px;
-  }
-
-  .categories,
-  .trending,
-  .ai-section {
-    padding: 40px 20px;
-  }
+.product img{
+width:100%;
+border-radius:10px;
+margin-bottom:10px;
 }
