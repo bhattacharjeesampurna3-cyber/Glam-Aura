@@ -1,151 +1,120 @@
-import "../../styles/admin.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import API from "../../utils/api";
 
 function AdminDashboard() {
+
   const navigate = useNavigate();
 
   const [products, setProducts] = useState([]);
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     name: "",
-    category: "",
     price: "",
+    image: "",
+    category: ""
   });
 
-  // Handle Input Change
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // 🔄 Fetch products
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
-  // Add Product
-  const handleAddProduct = (e) => {
-    e.preventDefault();
-
-    if (!formData.name || !formData.category || !formData.price) {
-      alert("Please fill all fields");
-      return;
+  const fetchProducts = async () => {
+    try {
+      const res = await API.get("/products");
+      setProducts(res.data);
+    } catch (error) {
+      console.log(error);
     }
-
-    setProducts([...products, formData]);
-
-    setFormData({
-      name: "",
-      category: "",
-      price: "",
-    });
   };
 
-  // Delete Product
-  const handleDelete = (index) => {
-    const updatedProducts = products.filter((_, i) => i !== index);
-    setProducts(updatedProducts);
-  };
+  // ➕ Add Product
+  const addProduct = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-  // Logout
-  const handleLogout = () => {
-    localStorage.removeItem("adminToken");
-    navigate("/admin");
+      console.log("Sending Form:", form); // DEBUG
+
+      const res = await API.post(
+        "/products",
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      setProducts([...products, res.data]);
+
+      // Reset form properly
+      setForm({
+        name: "",
+        price: "",
+        image: "",
+        category: ""
+      });
+
+      alert("Product added successfully");
+
+    } catch (error) {
+
+      if (error.response?.status === 401) {
+        localStorage.clear();
+        navigate("/");
+      }
+
+      alert(error.response?.data?.message || "Error adding product");
+    }
   };
 
   return (
-    <div className="admin-container">
+    <div className="admin-dashboard">
 
-      {/* SIDEBAR */}
-      <div className="admin-sidebar">
-        <h2>Admin Panel</h2>
-        <a href="#">Dashboard</a>
-        <a href="#">Products</a>
-        <a href="#">Orders</a>
-      </div>
+      <h1>Admin Panel</h1>
 
-      {/* MAIN CONTENT */}
-      <div className="admin-main">
+      <input
+        placeholder="Product Name"
+        value={form.name}
+        onChange={(e)=>setForm({...form,name:e.target.value})}
+      />
 
-        {/* HEADER */}
-        <div className="admin-header">
-          <h1>Manage Products</h1>
-          <button className="logout-btn" onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
+      <input
+        placeholder="Price"
+        type="number"
+        value={form.price}
+        onChange={(e)=>setForm({...form,price:Number(e.target.value)})}
+      />
 
-        {/* PRODUCT FORM */}
-        <div className="product-form">
-          <h3>Add New Product</h3>
-          <form onSubmit={handleAddProduct}>
-            <input
-              type="text"
-              name="name"
-              placeholder="Product Name"
-              value={formData.name}
-              onChange={handleChange}
-            />
+      <input
+        placeholder="Image URL"
+        value={form.image}
+        onChange={(e)=>setForm({...form,image:e.target.value})}
+      />
 
-            <input
-              type="text"
-              name="category"
-              placeholder="Category"
-              value={formData.category}
-              onChange={handleChange}
-            />
+      {/* ✅ CATEGORY DROPDOWN ADDED */}
+      <select
+        value={form.category}
+        onChange={(e)=>setForm({...form,category:e.target.value})}
+      >
+        <option value="">Select Category</option>
+        <option value="beauty">Beauty</option>
+        <option value="fashion">Fashion</option>
+        <option value="luxury">Luxury</option>
+      </select>
 
-            <input
-              type="number"
-              name="price"
-              placeholder="Price"
-              value={formData.price}
-              onChange={handleChange}
-            />
+      <button onClick={addProduct}>
+        Add Product
+      </button>
 
-            <button type="submit">Add Product</button>
-          </form>
-        </div>
+      <hr />
 
-        {/* PRODUCT TABLE */}
-        <div className="product-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price (₹)</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {products.length === 0 ? (
-                <tr>
-                  <td colSpan="4" style={{ textAlign: "center" }}>
-                    No Products Added
-                  </td>
-                </tr>
-              ) : (
-                products.map((product, index) => (
-                  <tr key={index}>
-                    <td>{product.name}</td>
-                    <td>{product.category}</td>
-                    <td>{product.price}</td>
-                    <td>
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(index)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-
-          </table>
-        </div>
-
+      <div>
+        {products.map((p)=>(
+          <div key={p._id} style={{ marginBottom: "10px" }}>
+            <strong>{p.name}</strong> - ₹{p.price} ({p.category})
+          </div>
+        ))}
       </div>
 
     </div>

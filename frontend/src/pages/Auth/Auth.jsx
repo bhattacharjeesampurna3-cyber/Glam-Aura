@@ -1,7 +1,7 @@
 import "../../styles/auth.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import API from "../../utils/api";  // Uncomment when backend is ready  
+import API from "../../utils/api";  // Uncomment when backend is ready  
 
 function Auth() {
   const navigate = useNavigate();
@@ -12,7 +12,19 @@ function Auth() {
     email: "",
     password: "",
   });
+   // CHECKING ADMIN LOGIN
+   const handleSubmita = (e) => {
+  e.preventDefault();
 
+  if (!formData.email || !formData.password) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  // USER LOGIN
+  localStorage.setItem("role", "user");
+  navigate("/home");
+};
   // Handle Input Change
   const handleChange = (e) => {
     setFormData({
@@ -22,35 +34,39 @@ function Auth() {
   };
 
   // Handle Submit
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => { 
     e.preventDefault();
 
-    if (!formData.email || !formData.password) {
-      alert("Please fill all required fields");
-      return;
-    }
+  try {
 
-    try {
-      if (isLogin) {
-        // ===== LOGIN =====
-        localStorage.setItem("token", "dummy-token");
-        navigate("/home");
+    if (isLogin) {
 
+      const res = await API.post("/auth/login", {
+        email: formData.email,
+        password: formData.password
+      });
+
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.role);
+
+      if (res.data.role === "admin") {
+        navigate("/admin");
       } else {
-        // ===== REGISTER =====
-        if (!formData.name) {
-          alert("Please enter your name");
-          return;
-        }
-
-        alert("Registration Successful! Please login.");
-        setIsLogin(true);
+        navigate("/home");
       }
 
-    } catch (error) {
-      alert("Something went wrong");
+    } else {
+
+      await API.post("/auth/register", formData);
+
+      alert("Registration successful");
+      setIsLogin(true);
     }
-  };
+
+  } catch (error) {
+    alert(error.response?.data?.message || "Login failed");
+  }
+};
 
   return (
     <div className="auth-container">
@@ -90,6 +106,10 @@ function Auth() {
             {isLogin ? "Login" : "Register"}
           </button>
 
+          <p style={{ cursor: "pointer", marginTop: "10px" }} onClick={() => navigate("/admin-login")}>
+           Login as Admin
+          </p>
+ 
         </form>
 
         <p>

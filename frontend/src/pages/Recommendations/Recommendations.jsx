@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
-import { formatPrice, capitalize } from "../utils/helpers";
-// import API from "../../utils/api"; // Uncomment when backend ready
+import { formatPrice, capitalize } from "../../helpers";
+import API from "../../utils/api"; // Uncomment when backend ready
 
 function Recommendations() {
   const [loading, setLoading] = useState(true);
@@ -14,8 +14,8 @@ function Recommendations() {
   const fetchRecommendations = async () => {
     try {
       // ===== WHEN BACKEND IS READY =====
-      // const res = await API.get("/ml/recommendations");
-      // setProducts(res.data);
+      const res = await API.get("/ml/recommendations");
+      setProducts(res.data);
 
       // Dummy Data (Temporary)
       setTimeout(() => {

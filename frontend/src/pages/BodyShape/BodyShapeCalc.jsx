@@ -1,4 +1,4 @@
-import { calculateBodyShape } from "../../utils/helpers";
+import { calculateBodyShape } from "../../helpers";
 
 const shape = calculateBodyShape(90, 70, 95);
 console.log(shape);
