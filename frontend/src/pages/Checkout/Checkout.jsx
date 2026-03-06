@@ -1,15 +1,8 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import API from "../../utils/api";
-import "../../styles/home.css";
+import { useState } from "react";
 
 function Checkout() {
 
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const [items, setItems] = useState([]);
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     fullName: "",
     email: "",
     phone: "",
@@ -20,91 +13,155 @@ function Checkout() {
     country: ""
   });
 
-  useEffect(() => {
-    if (location.state?.items) {
-      setItems(location.state.items);
-    } else {
-      navigate("/");
-    }
-  }, []);
-
-  const totalPrice = items.reduce(
-    (total, item) => total + item.price * (item.quantity || 1),
-    0
-  );
-
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setForm({
+      ...form,
       [e.target.name]: e.target.value
     });
   };
 
-  const handlePlaceOrder = async () => {
-    try {
-
-      const orderData = {
-        userDetails: formData,
-        items,
-        totalAmount: totalPrice
-      };
-
-      await API.post("/orders", orderData);
-
-      alert("Order placed successfully 🎉");
-
-      localStorage.removeItem("cart");
-
-      navigate("/home");
-
-    } catch (error) {
-      alert("Order failed");
-    }
-  };
-
   return (
-    <div className="checkout-container">
+    <div style={{
+      maxWidth: "1200px",
+      margin: "auto",
+      padding: "40px",
+      color: "white"
+    }}>
 
-      <h2>Checkout</h2>
+      <h1 style={{ marginBottom: "40px" }}>Checkout</h1>
 
-      <div className="checkout-grid">
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "2fr 1fr",
+        gap: "40px"
+      }}>
 
         {/* SHIPPING FORM */}
-        <div className="checkout-form">
 
-          <h3>Shipping Details</h3>
+        <div style={{
+          background: "#1e1e1e",
+          padding: "30px",
+          borderRadius: "12px"
+        }}>
 
-          {Object.keys(formData).map((key) => (
+          <h2 style={{ marginBottom: "20px" }}>
+            Shipping Details
+          </h2>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "20px"
+          }}>
+
             <input
-              key={key}
-              name={key}
-              placeholder={key}
-              value={formData[key]}
+              name="fullName"
+              placeholder="Full Name"
+              value={form.fullName}
               onChange={handleChange}
+              style={inputStyle}
             />
-          ))}
+
+            <input
+              name="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              style={inputStyle}
+            />
+
+            <input
+              name="phone"
+              placeholder="Phone"
+              value={form.phone}
+              onChange={handleChange}
+              style={inputStyle}
+            />
+
+            <input
+              name="city"
+              placeholder="City"
+              value={form.city}
+              onChange={handleChange}
+              style={inputStyle}
+            />
+
+            <input
+              name="state"
+              placeholder="State"
+              value={form.state}
+              onChange={handleChange}
+              style={inputStyle}
+            />
+
+            <input
+              name="pincode"
+              placeholder="Pincode"
+              value={form.pincode}
+              onChange={handleChange}
+              style={inputStyle}
+            />
+
+            <input
+              name="country"
+              placeholder="Country"
+              value={form.country}
+              onChange={handleChange}
+              style={inputStyle}
+            />
+
+          </div>
+
+          <textarea
+            name="address"
+            placeholder="Full Address"
+            value={form.address}
+            onChange={handleChange}
+            style={{
+              ...inputStyle,
+              marginTop: "20px",
+              width: "100%",
+              height: "100px"
+            }}
+          />
 
         </div>
 
+
         {/* ORDER SUMMARY */}
-        <div className="checkout-summary">
 
-          <h3>Order Summary</h3>
+        <div style={{
+          background: "#1e1e1e",
+          padding: "30px",
+          borderRadius: "12px",
+          height: "fit-content"
+        }}>
 
-          {items.map((item) => (
-            <p key={item._id}>
-              {item.name} x {item.quantity || 1}
-            </p>
-          ))}
+          <h2>Order Summary</h2>
 
-          <h4>Total: ₹{totalPrice}</h4>
+          <div style={{ marginTop: "20px" }}>
 
-          <button
-            className="checkout-btn"
-            onClick={handlePlaceOrder}
-          >
-            Place Order
-          </button>
+            <p> Lipstick × 1 </p>
+
+            <h3 style={{ marginTop: "20px" }}>
+              Total: ₹500
+            </h3>
+
+            <button style={{
+              marginTop: "30px",
+              width: "100%",
+              padding: "15px",
+              border: "none",
+              borderRadius: "8px",
+              background: "#ff4d6d",
+              color: "white",
+              fontSize: "16px",
+              cursor: "pointer"
+            }}>
+              Place Order
+            </button>
+
+          </div>
 
         </div>
 
@@ -113,5 +170,14 @@ function Checkout() {
     </div>
   );
 }
+
+const inputStyle = {
+  padding: "12px",
+  borderRadius: "8px",
+  border: "1px solid #444",
+  background: "#121212",
+  color: "white",
+  width: "100%"
+};
 
 export default Checkout;

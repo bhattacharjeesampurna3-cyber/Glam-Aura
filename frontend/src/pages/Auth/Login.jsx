@@ -1,77 +1,55 @@
-import "../../styles/auth.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/auth.css";
+import API from "../../utils/api";
 
 function Login() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: ""
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [error, setError] = useState("");
+  const handleLogin = async () => {
+    try {
+      const res = await API.post("/auth/login", {
+        email,
+        password,
+      });
 
-  // Handle input change
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+      localStorage.setItem("userInfo", JSON.stringify(res.data));
 
-  // Handle login submit
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError("");
-
-    if (!formData.email || !formData.password) {
-      setError("Please fill all fields");
-      return;
+      if (res.data.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/home");
+      }
+    } catch (error) {
+      alert("Invalid Email or Password");
     }
-
-    // Temporary demo login (replace with backend later)
-    localStorage.setItem("token", "demo-user");
-
-    navigate("/home");
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-box">
-        <h2>Login</h2>
+    <div style={{ padding: "40px" }}>
+      <h2>Login</h2>
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-          />
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-          />
+      <br /><br />
 
-          {error && <p style={{ color: "#ffdddd" }}>{error}</p>}
-          
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-          <button type="submit">Login</button>
-        </form>
+      <br /><br />
 
-        <div className="switch-text">
-          Don’t have an account?{" "}
-          <span onClick={() => navigate("/register")}>
-            Register
-          </span>
-        </div>
-      </div>
+      <button onClick={handleLogin}>Login</button>
     </div>
   );
 }

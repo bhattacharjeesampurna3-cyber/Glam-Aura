@@ -1,54 +1,76 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import API from "../../utils/api";
 
 function AdminLogin() {
 
   const navigate = useNavigate();
 
-  const [data, setData] = useState({
-    email: "",
-    password: ""
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+
+    e.preventDefault();
+
     try {
+
       const res = await API.post("/auth/login", {
-        email: data.email,
-        password: data.password
+        email,
+        password
       });
 
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.role);
-
-      if (res.data.role === "admin") {
-        navigate("/admin");
-      } else {
-        alert("This account is not an admin");
+      // Check if admin
+      if (res.data.role !== "admin") {
+        alert("You are not an admin");
+        return;
       }
 
-    } catch (err) {
+      // Save login info
+      localStorage.setItem("userInfo", JSON.stringify(res.data));
+
+      // Go to admin dashboard
+      navigate("/admin");
+
+    } catch (error) {
+
       alert("Invalid admin credentials");
+
     }
   };
 
   return (
-    <div className="admin-login">
+    <div style={{ padding: "40px", textAlign: "center" }}>
 
       <h2>Admin Login</h2>
 
-      <input
-        placeholder="Email"
-        onChange={(e)=>setData({...data,email:e.target.value})}
-      />
+      <form onSubmit={handleLogin}>
 
-      <input
-        placeholder="Password"
-        type="password"
-        onChange={(e)=>setData({...data,password:e.target.value})}
-      />
+        <input
+          type="email"
+          placeholder="Admin Email"
+          value={email}
+          onChange={(e)=>setEmail(e.target.value)}
+          required
+        />
 
-      <button onClick={handleLogin}>Login</button>
+        <br /><br />
+
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e)=>setPassword(e.target.value)}
+          required
+        />
+
+        <br /><br />
+
+        <button type="submit">
+          Login as Admin
+        </button>
+
+      </form>
 
     </div>
   );
