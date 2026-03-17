@@ -1,124 +1,143 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect,useState } from "react";
 import API from "../../utils/api";
 
-function AdminDashboard() {
+function AdminDashboard(){
 
-  const navigate = useNavigate();
+const [products,setProducts] = useState([]);
 
-  const [products, setProducts] = useState([]);
-  const [form, setForm] = useState({
-    name: "",
-    price: "",
-    image: "",
-    category: ""
-  });
+const [name,setName] = useState("");
+const [price,setPrice] = useState("");
+const [image,setImage] = useState("");
+const [images,setImages] = useState("");
+const [category,setCategory] = useState("");
+const [stock,setStock] = useState("");
+const [description,setDescription] = useState("");
 
-  // 🔄 Fetch products
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
-  const fetchProducts = async () => {
-    try {
-      const res = await API.get("/products");
-      setProducts(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const fetchProducts = async()=>{
 
-  // ➕ Add Product
-  const addProduct = async () => {
-    try {
-      const token = localStorage.getItem("token");
+const res = await API.get("/products");
 
-      console.log("Sending Form:", form); // DEBUG
+setProducts(res.data);
 
-      const res = await API.post(
-        "/products",
-        form,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
+};
 
-      setProducts([...products, res.data]);
 
-      // Reset form properly
-      setForm({
-        name: "",
-        price: "",
-        image: "",
-        category: ""
-      });
+useEffect(()=>{
 
-      alert("Product added successfully");
+fetchProducts();
 
-    } catch (error) {
+},[]);
 
-      if (error.response?.status === 401) {
-        localStorage.clear();
-        navigate("/");
-      }
 
-      alert(error.response?.data?.message || "Error adding product");
-    }
-  };
+const addProduct = async()=>{
 
-  return (
-    <div className="admin-dashboard">
+await API.post("/products",{
 
-      <h1>Admin Panel</h1>
+name,
+price,
+image,
+images:images.split(","),
+category,
+stock,
+description
 
-      <input
-        placeholder="Product Name"
-        value={form.name}
-        onChange={(e)=>setForm({...form,name:e.target.value})}
-      />
+});
 
-      <input
-        placeholder="Price"
-        type="number"
-        value={form.price}
-        onChange={(e)=>setForm({...form,price:Number(e.target.value)})}
-      />
+alert("Product Added");
 
-      <input
-        placeholder="Image URL"
-        value={form.image}
-        onChange={(e)=>setForm({...form,image:e.target.value})}
-      />
+fetchProducts();
 
-      {/* ✅ CATEGORY DROPDOWN ADDED */}
-      <select
-        value={form.category}
-        onChange={(e)=>setForm({...form,category:e.target.value})}
-      >
-        <option value="">Select Category</option>
-        <option value="beauty">Beauty</option>
-        <option value="fashion">Fashion</option>
-        <option value="luxury">Luxury</option>
-      </select>
+};
 
-      <button onClick={addProduct}>
-        Add Product
-      </button>
 
-      <hr />
+const deleteProduct = async(id)=>{
 
-      <div>
-        {products.map((p)=>(
-          <div key={p._id} style={{ marginBottom: "10px" }}>
-            <strong>{p.name}</strong> - ₹{p.price} ({p.category})
-          </div>
-        ))}
-      </div>
+await API.delete(`/products/${id}`);
 
-    </div>
-  );
+fetchProducts();
+
+};
+
+
+return(
+
+<div style={{padding:"40px"}}>
+
+<h1>Admin Panel</h1>
+
+
+<div style={{display:"flex",gap:"10px",flexWrap:"wrap"}}>
+
+<input placeholder="Product Name"
+onChange={(e)=>setName(e.target.value)}/>
+
+<input placeholder="Price"
+onChange={(e)=>setPrice(e.target.value)}/>
+
+<input placeholder="Main Image"
+onChange={(e)=>setImage(e.target.value)}/>
+
+<input placeholder="Gallery Images (comma separated)"
+onChange={(e)=>setImages(e.target.value)}/>
+
+
+<select onChange={(e)=>setCategory(e.target.value)}>
+
+<option>Select Category</option>
+<option value="beauty">Beauty</option>
+<option value="fashion">Fashion</option>
+<option value="luxury">Luxury</option>
+
+</select>
+
+
+<input placeholder="Stock"
+onChange={(e)=>setStock(e.target.value)}/>
+
+<input placeholder="Description"
+onChange={(e)=>setDescription(e.target.value)}/>
+
+
+<button onClick={addProduct}>Add Product</button>
+
+</div>
+
+
+<hr/>
+
+
+{products.map((p)=>{
+
+let status="In Stock";
+
+if(p.stock<=0) status="Sold Out";
+else if(p.stock<=5) status="Low Stock";
+
+return(
+
+<div key={p._id} style={{marginBottom:"20px"}}>
+
+<b>{p.name}</b> - ₹{p.price} ({p.category})
+| Stock: {p.stock} | {status}
+
+<button onClick={()=>deleteProduct(p._id)}
+style={{marginLeft:"10px"}}>
+
+Delete
+
+</button>
+
+</div>
+
+);
+
+})}
+
+</div>
+
+);
+
 }
 
 export default AdminDashboard;

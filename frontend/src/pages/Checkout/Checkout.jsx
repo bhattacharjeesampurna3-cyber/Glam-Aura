@@ -1,6 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import API from "../../utils/api";
 
 function Checkout() {
+  const navigate = useNavigate();
+
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  const total = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
 
   const [form, setForm] = useState({
     fullName: "",
@@ -10,25 +17,73 @@ function Checkout() {
     city: "",
     state: "",
     pincode: "",
-    country: ""
+    country: "India"
   });
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const loadRazorpay = async () => {
+    try {
+      // ✅ STEP 1: SAVE ORDER FIRST
+      const orderRes = await API.post("/orders", {
+        items: cart,
+        shipping: form,
+        totalPrice: total,
+        status: "Pending"
+      });
+
+      const savedOrder = orderRes.data;
+
+      // ✅ STEP 2: CREATE RAZORPAY ORDER
+      const res = await API.post("/payment/create-order", {
+        amount: total
+      });
+
+      const options = {
+        key: "YOUR_RAZORPAY_KEY", // replace later
+        amount: res.data.amount,
+        currency: "INR",
+        name: "GlamAura",
+        description: "Beauty & Fashion Store",
+        order_id: res.data.id,
+
+        // ✅ SUCCESS
+        handler: async function (response) {
+          await API.put(`/orders/${savedOrder._id}`, {
+            status: "Paid",
+            paymentId: response.razorpay_payment_id
+          });
+
+          localStorage.removeItem("cart");
+          alert("Payment Successful");
+          navigate("/");
+        }
+      };
+
+      const rzp = new window.Razorpay(options);
+
+      // ❌ FAILURE
+      rzp.on("payment.failed", async function () {
+        await API.put(`/orders/${savedOrder._id}`, {
+          status: "Failed"
+        });
+
+        alert("Payment Failed (Order Saved)");
+      });
+
+      rzp.open();
+
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    }
   };
 
   return (
-    <div style={{
-      maxWidth: "1200px",
-      margin: "auto",
-      padding: "40px",
-      color: "white"
-    }}>
-
-      <h1 style={{ marginBottom: "40px" }}>Checkout</h1>
+    <div style={{ padding: "40px" }}>
+      <h1 style={{ marginBottom: "30px" }}>Checkout</h1>
 
       <div style={{
         display: "grid",
@@ -36,148 +91,87 @@ function Checkout() {
         gap: "40px"
       }}>
 
-        {/* SHIPPING FORM */}
-
+        {/* SHIPPING */}
         <div style={{
           background: "#1e1e1e",
           padding: "30px",
-          borderRadius: "12px"
+          borderRadius: "10px"
         }}>
+          <h2>Shipping Details</h2>
 
-          <h2 style={{ marginBottom: "20px" }}>
-            Shipping Details
-          </h2>
+          <div style={{ display: "grid", gap: "15px", marginTop: "20px" }}>
+            <input name="fullName" placeholder="Full Name" onChange={handleChange} style={inputStyle} />
+            <input name="email" placeholder="Email" onChange={handleChange} style={inputStyle} />
+            <input name="phone" placeholder="Phone" onChange={handleChange} style={inputStyle} />
+            <input name="address" placeholder="Address" onChange={handleChange} style={inputStyle} />
 
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "20px"
-          }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+              <input name="city" placeholder="City" onChange={handleChange} style={inputStyle} />
+              <input name="state" placeholder="State" onChange={handleChange} style={inputStyle} />
+            </div>
 
-            <input
-              name="fullName"
-              placeholder="Full Name"
-              value={form.fullName}
-              onChange={handleChange}
-              style={inputStyle}
-            />
-
-            <input
-              name="email"
-              placeholder="Email"
-              value={form.email}
-              onChange={handleChange}
-              style={inputStyle}
-            />
-
-            <input
-              name="phone"
-              placeholder="Phone"
-              value={form.phone}
-              onChange={handleChange}
-              style={inputStyle}
-            />
-
-            <input
-              name="city"
-              placeholder="City"
-              value={form.city}
-              onChange={handleChange}
-              style={inputStyle}
-            />
-
-            <input
-              name="state"
-              placeholder="State"
-              value={form.state}
-              onChange={handleChange}
-              style={inputStyle}
-            />
-
-            <input
-              name="pincode"
-              placeholder="Pincode"
-              value={form.pincode}
-              onChange={handleChange}
-              style={inputStyle}
-            />
-
-            <input
-              name="country"
-              placeholder="Country"
-              value={form.country}
-              onChange={handleChange}
-              style={inputStyle}
-            />
-
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+              <input name="pincode" placeholder="Pincode" onChange={handleChange} style={inputStyle} />
+              <input name="country" placeholder="Country" onChange={handleChange} style={inputStyle} />
+            </div>
           </div>
-
-          <textarea
-            name="address"
-            placeholder="Full Address"
-            value={form.address}
-            onChange={handleChange}
-            style={{
-              ...inputStyle,
-              marginTop: "20px",
-              width: "100%",
-              height: "100px"
-            }}
-          />
-
         </div>
 
-
-        {/* ORDER SUMMARY */}
-
+        {/* SUMMARY */}
         <div style={{
           background: "#1e1e1e",
           padding: "30px",
-          borderRadius: "12px",
+          borderRadius: "10px",
           height: "fit-content"
         }}>
-
           <h2>Order Summary</h2>
 
           <div style={{ marginTop: "20px" }}>
+            {cart.map(item => (
+              <div key={item._id} style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "10px"
+              }}>
+                <p>{item.name} × {item.qty}</p>
+                <p>₹{item.price * item.qty}</p>
+              </div>
+            ))}
+          </div>
 
-            <p> Lipstick × 1 </p>
+          <hr style={{ margin: "20px 0" }} />
 
-            <h3 style={{ marginTop: "20px" }}>
-              Total: ₹500
-            </h3>
+          <h3>Total: ₹{total}</h3>
 
-            <button style={{
-              marginTop: "30px",
+          <button
+            onClick={loadRazorpay}
+            style={{
+              marginTop: "20px",
               width: "100%",
-              padding: "15px",
+              padding: "12px",
               border: "none",
               borderRadius: "8px",
               background: "#ff4d6d",
               color: "white",
               fontSize: "16px",
               cursor: "pointer"
-            }}>
-              Place Order
-            </button>
-
-          </div>
-
+            }}
+          >
+            Pay Now
+          </button>
         </div>
 
       </div>
-
     </div>
   );
 }
 
 const inputStyle = {
-  padding: "12px",
-  borderRadius: "8px",
-  border: "1px solid #444",
-  background: "#121212",
-  color: "white",
-  width: "100%"
+  padding: "10px",
+  borderRadius: "6px",
+  border: "1px solid #333",
+  background: "#111",
+  color: "white"
 };
 
 export default Checkout;

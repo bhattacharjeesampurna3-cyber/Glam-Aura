@@ -15,6 +15,7 @@ import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminRoute from "./components/AdminRoute";
 import CategoryPage from "./pages/Category/CategoryPage";
 import Checkout from "./pages/Checkout/Checkout";
+import AdminOrders from "./pages/Admin/AdminOrders";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
 
         <Route path="/recommendations" element={<Recommendations />} />
+        <Route path="/admin/orders" element={<AdminOrders/>}/>
 
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/checkout" element={<Checkout />} />

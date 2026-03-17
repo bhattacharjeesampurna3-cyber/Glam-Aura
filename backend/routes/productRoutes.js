@@ -1,46 +1,114 @@
 import express from "express";
 import Product from "../models/Product.js";
-import protect from "../middleware/authMiddleware.js";
-import adminOnly from "../middleware/adminMiddleware.js";
 
 const router = express.Router();
 
-// Public route (anyone can see products)
+/* =========================
+GET PRODUCTS WITH SEARCH
+========================= */
+
 router.get("/", async (req, res) => {
-  const products = await Product.find();
-  res.json(products);
+  try {
+
+    const keyword = req.query.keyword
+      ? {
+          name: {
+            $regex: req.query.keyword,
+            $options: "i",
+          },
+        }
+      : {};
+
+    const products = await Product.find({ ...keyword });
+
+    res.json(products);
+
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
 });
 
-// 🔒 Admin only - Add product
-router.post(
-  "/",
-  protect,
-  adminOnly,
-  async (req, res) => {
-    const product = await Product.create(req.body);
-    res.json(product);
-  }
-);
 
-// 🔒 Get Single Product
+/* =========================
+GET PRODUCT BY ID
+========================= */
+
 router.get("/:id", async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  if (product) {
+
+  try {
+
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
     res.json(product);
-  } else {
-    res.status(404).json({ message: "Product not found" });
+
+  } catch (error) {
+
+    res.status(500).json({ message: "Server Error" });
+
   }
+
 });
 
-// 🔒 Admin only - Delete product
-router.delete(
-  "/:id",
-  protect,
-  adminOnly,
-  async (req, res) => {
-    await Product.findByIdAndDelete(req.params.id);
-    res.json("Deleted");
+
+/* =========================
+ADD PRODUCT
+========================= */
+
+router.post("/", async (req, res) => {
+
+  try {
+
+    const { name, price, image, images, category, stock, description } = req.body;
+
+    const product = await Product.create({
+      name,
+      price,
+      image,
+      images,
+      category,
+      stock,
+      description
+    });
+
+    res.json(product);
+
+  } catch (error) {
+
+    res.status(500).json({ message: "Add product failed" });
+
   }
-);
+
+});
+
+
+/* =========================
+DELETE PRODUCT
+========================= */
+
+router.delete("/:id", async (req, res) => {
+
+  try {
+
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    await product.deleteOne();
+
+    res.json({ message: "Product deleted" });
+
+  } catch (error) {
+
+    res.status(500).json({ message: "Delete failed" });
+
+  }
+
+});
 
 export default router;

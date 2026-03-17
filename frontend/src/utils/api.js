@@ -1,44 +1,19 @@
 import axios from "axios";
 
-// Create axios instance
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // Change in production
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: "http://localhost:5000/api"
 });
 
-// ===== REQUEST INTERCEPTOR =====
-// Automatically attach token to every request
+API.interceptors.request.use((req) => {
 
-API.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+  if (userInfo?.token) {
+    req.headers.Authorization = `Bearer ${userInfo.token}`;
   }
-);
 
-// ===== RESPONSE INTERCEPTOR =====
-// Handle token expiration or errors globally
+  return req;
 
-API.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      localStorage.removeItem("token");
-      window.location.href = "/";
-    }
-
-    return Promise.reject(error);
-  }
-);
+});
 
 export default API;
