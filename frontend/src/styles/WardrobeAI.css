@@ -1,0 +1,106 @@
+/* MAIN CONTAINER */
+.wardrobe-container {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #2b0008, #000000 60%);
+  padding: 60px 20px;
+  text-align: center;
+}
+
+/* HEADER */
+.wardrobe-header h1 {
+  font-size: 42px;
+  color: #ff6a88;
+  margin-bottom: 10px;
+}
+
+.wardrobe-header p {
+  color: #bdbdbd;
+  font-size: 16px;
+  margin-bottom: 50px;
+}
+
+/* CARD CONTAINER */
+.wardrobe-card {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+/* UPLOAD BOX */
+.upload-box {
+  width: 380px;
+  height: 220px;
+  border: 2px dashed #ff6a88;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(10px);
+
+  transition: 0.3s;
+}
+
+.upload-box:hover {
+  border-color: #ff8fa3;
+  box-shadow: 0 0 20px rgba(255,106,136,0.4);
+}
+
+.upload-box input {
+  display: none;
+}
+
+/* TEXT */
+.upload-content p {
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.upload-content span {
+  font-size: 14px;
+  color: #bbbbbb;
+}
+
+/* IMAGE PREVIEW */
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* BUTTON */
+.try-btn {
+  display: block;
+  width: 220px;
+  margin: 20px auto 10px auto;
+  padding: 12px;
+
+  background: linear-gradient(90deg, #ff6a88, #ff99ac);
+  border: none;
+  border-radius: 25px;
+
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+
+  transition: 0.3s;
+}
+
+.coming-soon-btn {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* COMING SOON TEXT */
+.coming-soon-text {
+  text-align: center;
+  margin-top: 6px;
+  color: #ff8fa3;
+  font-size: 14px;
+}

@@ -19,16 +19,7 @@ function Footer() {
           <ul>
             <li><a href="#">Makeup</a></li>
             <li><a href="#">Dresses</a></li>
-            <li><a href="#">Accessories</a></li>
-          </ul>
-        </div>
-
-        <div className="footer-column">
-          <h4>Company</h4>
-          <ul>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">Careers</a></li>
+            <li><a href="#">Luxury</a></li>
           </ul>
         </div>
 

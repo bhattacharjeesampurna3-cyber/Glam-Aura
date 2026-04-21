@@ -1,0 +1,144 @@
+/* MAIN CONTAINER */
+.makeup-container {
+  min-height: 100vh;
+  background: #000;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 20px;
+  position: relative;
+}
+
+/* BACKGROUND GLOW */
+.bg-glow {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255,77,109,0.35), transparent);
+  top: -120px;
+  right: -120px;
+  filter: blur(120px);
+}
+
+/* HEADER */
+.makeup-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.makeup-header h1 {
+  font-size: 48px;
+  background: linear-gradient(90deg,#ff4d6d,#ff9a9e);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* CARD */
+.makeup-card {
+  width: 100%;
+  max-width: 620px;
+  padding: 40px;
+  border-radius: 25px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* UPLOAD */
+.upload-box {
+  width: 100%;
+  border: 2px dashed #444;
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.upload-box input {
+  display: none;
+}
+
+.upload-content p {
+  font-size: 18px;
+}
+
+.upload-content span {
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* IMAGE PREVIEW */
+.preview-img {
+  width: 100%;
+  border-radius: 15px;
+  margin-top: 15px;
+}
+
+/* BUTTON */
+.analyze-btn {
+  margin-top: 20px;
+  width: 100%;
+  background: linear-gradient(90deg,#ff4d6d,#ff9a9e);
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* RESULTS */
+.recommend-list {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.recommend-list h3 {
+  margin-top: 25px;
+}
+
+/* AI PRODUCT CARD */
+.ai-product-card{
+  display:flex;
+  align-items:center;
+  gap:16px;
+
+  width:100%;
+  max-width:420px;
+
+  margin:12px auto;
+  padding:14px;
+
+  border-radius:14px;
+
+  background:rgba(255,255,255,0.06);
+
+  text-decoration:none;
+  color:white;
+}
+
+/* SMALL IMAGE */
+.ai-product-img{
+  width:70px;
+  height:70px;
+  min-width:70px;
+
+  object-fit:contain;
+
+  border-radius:10px;
+
+  background:#111;
+  padding:6px;
+}
+
+/* TEXT */
+.ai-product-card p{
+  margin:0;
+  font-size:14px;
+  line-height:1.4;
+}

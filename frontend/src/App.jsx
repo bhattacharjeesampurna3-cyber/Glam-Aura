@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -17,17 +17,39 @@ import CategoryPage from "./pages/Category/CategoryPage";
 import Checkout from "./pages/Checkout/Checkout";
 import AdminOrders from "./pages/Admin/AdminOrders";
 
+import AITools from "./pages/AITools/AITools";
+import BodyShape from "./pages/AITools/BodyShape";
+import MakeupAI from "./pages/AITools/MakeupAI";
+import WardrobeAI from "./pages/AITools/WardrobeAI";
+
 function App() {
+
+  // ✅ Check login
+  const isLoggedIn = () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      return user && user.token;
+    } catch {
+      return false;
+    }
+  };
+
   return (
     <>
       <Navbar />
 
       <Routes>
+
+        {/* 🔥 ALWAYS SHOW LOGIN */}
         <Route path="/" element={<Auth />} />
-        <Route path="/home" element={<Home />} />
+
+        {/* 🔥 PROTECTED HOME */}
+        <Route
+          path="/home"
+          element={isLoggedIn() ? <Home /> : <Navigate to="/" />}
+        />
 
         <Route path="/category/:type" element={<CategoryPage />} />
-
         <Route path="/product/:id" element={<ProductDetails />} />
 
         <Route path="/cart" element={<Cart />} />
@@ -35,10 +57,15 @@ function App() {
         <Route path="/profile" element={<Profile />} />
 
         <Route path="/recommendations" element={<Recommendations />} />
-        <Route path="/admin/orders" element={<AdminOrders/>}/>
+        <Route path="/admin/orders" element={<AdminOrders />} />
 
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/checkout" element={<Checkout />} />
+
+        <Route path="/ai-tools" element={<AITools />} />
+        <Route path="/ai/body-shape" element={<BodyShape />} />
+        <Route path="/ai/makeup" element={<MakeupAI />} />
+        <Route path="/ai/wardrobe" element={<WardrobeAI />} />
 
         <Route
           path="/admin"
@@ -48,6 +75,7 @@ function App() {
             </AdminRoute>
           }
         />
+
       </Routes>
 
       <Footer />

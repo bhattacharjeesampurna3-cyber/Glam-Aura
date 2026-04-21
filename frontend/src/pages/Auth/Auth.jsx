@@ -1,7 +1,7 @@
 import "../../styles/auth.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../../utils/api";  // Uncomment when backend is ready  
+import API from "../../utils/api";
 
 function Auth() {
   const navigate = useNavigate();
@@ -12,19 +12,7 @@ function Auth() {
     email: "",
     password: "",
   });
-   // CHECKING ADMIN LOGIN
-   const handleSubmita = (e) => {
-  e.preventDefault();
 
-  if (!formData.email || !formData.password) {
-    alert("Please fill all fields");
-    return;
-  }
-
-  // USER LOGIN
-  localStorage.setItem("role", "user");
-  navigate("/home");
-};
   // Handle Input Change
   const handleChange = (e) => {
     setFormData({
@@ -33,40 +21,50 @@ function Auth() {
     });
   };
 
-  // Handle Submit
-  const handleSubmit = async (e) => { 
-    e.preventDefault();
+  // 🔥 LOGIN + REGISTER FUNCTION (FINAL FIX)
+  const handleSubmit = async () => {
+    console.log("🔥 LOGIN CLICKED");
 
-  try {
-
-    if (isLogin) {
-
-      const res = await API.post("/auth/login", {
-        email: formData.email,
-        password: formData.password
-      });
-
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.role);
-
-      if (res.data.role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/home");
-      }
-
-    } else {
-
-      await API.post("/auth/register", formData);
-
-      alert("Registration successful");
-      setIsLogin(true);
+    if (!formData.email || !formData.password) {
+      alert("Please fill all fields");
+      return;
     }
 
-  } catch (error) {
-    alert(error.response?.data?.message || "Login failed");
-  }
+    try {
+      if (isLogin) {
+        // LOGIN API CALL
+        const res = await API.post("/auth/login", {
+          email: formData.email,
+          password: formData.password,
+        });
+
+        console.log("LOGIN RESPONSE:", res.data);
+
+        // ✅ STORE USER
+        const userData = {
+        token: res.data.token,
+        role: res.data.role,
+        email: res.data.user?.email || res.data.email || formData.email,
 };
+
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        // 🚀 FORCE RELOAD (IMPORTANT FIX)
+        window.location.href = "/home";
+
+      } else {
+        // REGISTER API
+        await API.post("/auth/register", formData);
+
+        alert("Registration successful");
+        setIsLogin(true);
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || "Login failed");
+    }
+  };
 
   return (
     <div className="auth-container">
@@ -74,48 +72,57 @@ function Auth() {
 
         <h2>{isLogin ? "Login" : "Register"}</h2>
 
-        <form onSubmit={handleSubmit}>
-
-          {!isLogin && (
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          )}
-
+        {/* REGISTER NAME */}
+        {!isLogin && (
           <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
             onChange={handleChange}
           />
+        )}
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-          />
+        {/* EMAIL */}
+        <input
+          type="email"
+          name="email"
+          placeholder="Email Address"
+          value={formData.email}
+          onChange={handleChange}
+        />
 
-          <button type="submit">
-            {isLogin ? "Login" : "Register"}
-          </button>
+        {/* PASSWORD */}
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+        />
 
-          <p style={{ cursor: "pointer", marginTop: "10px" }} onClick={() => navigate("/admin-login")}>
-           Login as Admin
-          </p>
- 
-        </form>
+        {/* BUTTON */}
+        <button type="button" onClick={handleSubmit}>
+          {isLogin ? "Login" : "Register"}
+        </button>
 
+        {/* ADMIN LOGIN */}
+        <p
+          style={{ cursor: "pointer", marginTop: "10px" }}
+          onClick={() => navigate("/admin-login")}
+        >
+          Login as Admin
+        </p>
+
+        {/* SWITCH LOGIN/REGISTER */}
         <p>
           {isLogin ? "New user?" : "Already have an account?"}
           <span
-            style={{ cursor: "pointer", fontWeight: "bold", marginLeft: "5px" }}
+            style={{
+              cursor: "pointer",
+              fontWeight: "bold",
+              marginLeft: "5px",
+            }}
             onClick={() => setIsLogin(!isLogin)}
           >
             {isLogin ? "Register here" : "Login here"}

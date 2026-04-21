@@ -6,6 +6,13 @@ const reviewSchema = new mongoose.Schema({
   comment: String
 });
 
+// 🔥 SHADE SCHEMA
+const shadeSchema = new mongoose.Schema({
+  name: String,
+  color: String,
+  image: String
+});
+
 const productSchema = new mongoose.Schema({
 
   name: {
@@ -31,6 +38,18 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true
+  },
+
+  // 🔥 NEW
+  subcategory: {
+    type: String,
+    default: ""
+  },
+
+  // 🔥 THIS WAS MISSING (MAIN FIX)
+  shades: {
+    type: [shadeSchema],
+    default: []
   },
 
   description: {

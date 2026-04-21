@@ -36,8 +36,7 @@ function Home() {
           <p>Discover shades & styles made just for you</p>
           <button
             className="hero-btn"
-            onClick={() => navigate("/recommendations")}
-          >
+            onClick={() => navigate("/ai-tools")}>
             Try AI Now
           </button>
         </div>
@@ -53,16 +52,6 @@ function Home() {
         >
           <div className="category-overlay">
             <h3>Makeup</h3>
-          </div>
-        </div>
-
-        <div
-          className="category-card"
-          style={{ backgroundImage: "url('/images/ai.jpg')" }}
-          onClick={() => navigate("/category/ai-tools")}
-        >
-          <div className="category-overlay">
-            <h3>AI Tools</h3>
           </div>
         </div>
 

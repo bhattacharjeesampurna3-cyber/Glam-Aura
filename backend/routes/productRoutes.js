@@ -4,65 +4,49 @@ import Product from "../models/Product.js";
 const router = express.Router();
 
 /* =========================
-GET PRODUCTS WITH SEARCH
+GET PRODUCTS
 ========================= */
-
 router.get("/", async (req, res) => {
   try {
-
-    const keyword = req.query.keyword
-      ? {
-          name: {
-            $regex: req.query.keyword,
-            $options: "i",
-          },
-        }
-      : {};
-
-    const products = await Product.find({ ...keyword });
-
+    const products = await Product.find();
     res.json(products);
-
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
 });
-
 
 /* =========================
 GET PRODUCT BY ID
 ========================= */
-
 router.get("/:id", async (req, res) => {
-
   try {
-
     const product = await Product.findById(req.params.id);
-
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
     res.json(product);
-
   } catch (error) {
-
-    res.status(500).json({ message: "Server Error" });
-
+    res.status(500).json({ message: "Error" });
   }
-
 });
 
-
 /* =========================
-ADD PRODUCT
+ADD PRODUCT (🔥 FINAL FIX)
 ========================= */
-
 router.post("/", async (req, res) => {
 
   try {
 
-    const { name, price, image, images, category, stock, description } = req.body;
+    console.log("BODY RECEIVED:", req.body); // 🔥 DEBUG
+
+    const {
+      name,
+      price,
+      image,
+      images,
+      category,
+      subcategory,
+      shades,
+      stock,
+      description
+    } = req.body;
 
     const product = await Product.create({
       name,
@@ -70,6 +54,11 @@ router.post("/", async (req, res) => {
       image,
       images,
       category,
+      subcategory,
+
+      // 🔥 MOST IMPORTANT LINE
+      shades: shades || [],
+
       stock,
       description
     });
@@ -77,38 +66,21 @@ router.post("/", async (req, res) => {
     res.json(product);
 
   } catch (error) {
-
-    res.status(500).json({ message: "Add product failed" });
-
+    console.log(error);
+    res.status(500).json({ message: "Add failed" });
   }
-
 });
-
 
 /* =========================
 DELETE PRODUCT
 ========================= */
-
 router.delete("/:id", async (req, res) => {
-
   try {
-
-    const product = await Product.findById(req.params.id);
-
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    await product.deleteOne();
-
-    res.json({ message: "Product deleted" });
-
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ message: "Deleted" });
   } catch (error) {
-
     res.status(500).json({ message: "Delete failed" });
-
   }
-
 });
 
 export default router;
